@@ -34,18 +34,24 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	private class IteratorImpl implements Iterator<T> {
      // TODO Implementar el iterador normal
 		
+		private Node<T> current;
+		
 		@Override
 		public boolean hasNext() {
 
-		return false;
+		return (current != null);
 		}
 
 		@Override
 		public T next() {
-
 			
-
-			return null;
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			
+			T element = current.elem;			
+			current = current.next;
+			return element;
 		}
 
 		@Override
@@ -65,25 +71,81 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		// TODO RECURSIVO
 		//	Construye y devuelve con el formato adecuado "(A B C )" 
 		
-		return null;
+		StringBuffer aux = new StringBuffer();
+		Node<T> node = front;
+		
+		aux.append("(");
+		
+		if(isEmpty()) {
+			aux.append("");
+		}else {
+			aux.append(toStringRec(front));
+		}
+		
+		aux.append(")");		
+		
+		
+		return aux.toString();
+	}
+	
+	private String toStringRec(Node<T> node) {
+		StringBuffer aux = new StringBuffer();
+		
+		if(node != null) {
+			if(node.next == null) {
+				aux.append(node.elem);
+			}else {
+				toStringRec(node.next);
+			}
+		}
+		
+		return aux.toString();
 	}
 	
 	
 	@Override
 	public boolean contains(T target) {
 		// TODO RECURSIVO
+				
+		if(target == null) {
+			throw new NullPointerException();
+		}else {
+			return containsRec(target,front);
+		}
 		
-		
-		return false;
 	}
 
+	
+	private boolean containsRec(T elem,Node<T> node) {
+		if(elem == null || node == null) {
+			throw new NullPointerException();
+		}else {
+			return elem.equals(node.elem) && containsRec(elem, node.next);
+		}
+	}
 	
   @Override
 	public int count(T element) {
 	// TODO RECURSIVO
-	  return 0;
+	  if(element == null) {
+		  throw new NullPointerException();
+	  }else {
+		  return countRec(element,front);
+	  }
 		
 	}
+  
+  private int countRec(T element, Node<T> node) {
+	  int contador = 0;
+	  
+	  if(element.equals(node.elem)) {
+		  contador++;
+	  }else {
+		  contador = countRec(element, node.next);
+	  }
+	  
+	  return contador;
+  }
 
 
 	@Override
