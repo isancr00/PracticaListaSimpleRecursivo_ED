@@ -36,6 +36,11 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		
 		private Node<T> current;
 		
+		public IteratorImpl(Node<T>node) {
+			// TODO Auto-generated constructor stub
+			this.current = node;
+		}
+		
 		@Override
 		public boolean hasNext() {
 
@@ -72,7 +77,6 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		//	Construye y devuelve con el formato adecuado "(A B C )" 
 		
 		StringBuffer aux = new StringBuffer();
-		Node<T> node = front;
 		
 		aux.append("(");
 		
@@ -114,7 +118,6 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		}
 		
 	}
-
 	
 	private boolean containsRec(T elem,Node<T> node) {
 		if(elem == null || node == null) {
@@ -127,21 +130,22 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
   @Override
 	public int count(T element) {
 	// TODO RECURSIVO
+	  
 	  if(element == null) {
 		  throw new NullPointerException();
 	  }else {
-		  return countRec(element,front);
+		  int contador = 0;
+		  return countRec(element,front, contador);
 	  }
 		
 	}
   
-  private int countRec(T element, Node<T> node) {
-	  int contador = 0;
+  private int countRec(T element, Node<T> node,int contador) {
 	  
 	  if(element.equals(node.elem)) {
 		  contador++;
 	  }else {
-		  contador = countRec(element, node.next);
+		  contador = countRec(element, node.next,contador);
 	  }
 	  
 	  return contador;
@@ -152,6 +156,21 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	public T getLast() throws EmptyCollectionException {
 		// TODO RECURSIVO
 		
+		if(isEmpty()) {
+			throw new EmptyCollectionException("LISTA SIMPLEMENTE ENLAZADA");
+		}else {
+			return getLastRec(front);
+		}
+			
+	}
+	
+	private T getLastRec(Node<T> node) {
+		if(node.next == null) {
+			return node.elem;
+		}else {
+			getLastRec(node.next);
+		}
+		
 		return null;
 	}
 
@@ -160,6 +179,14 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public boolean isOrdered() {
      // TODO RECURSIVO
+		
+		if(isEmpty()) {
+			return true;
+		}
+		return isOrderedRec(front);
+	}
+	
+	private boolean isOrderedRec(Node<T> node) {
 		return false;
 	}
 
@@ -225,7 +252,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public Iterator<T> iterator() {
 		// TODO 
-		return null;
+		return new IteratorImpl(front);
 	}
 
 
