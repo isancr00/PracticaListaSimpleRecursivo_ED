@@ -187,6 +187,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	}
 	
 	private boolean isOrderedRec(Node<T> node) {
+		//TODO
 		return false;
 	}
 
@@ -194,22 +195,93 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public T remove(T element) throws EmptyCollectionException {
     // TODO RECURSIVO
-		return null;
+		T elem = null;
+		if(isEmpty()) {
+			throw new EmptyCollectionException("Lista simplemente enlazada");
+		}else if(element == null) {
+			throw new NullPointerException();
+		}else if(element.equals(front.elem)) {
+			front = front.next;
+			return front.elem;
+		}else {
+			elem = removeRec(element,front.next,front);
+		}
+		return elem;
 		
+		
+	}
+	
+	private T removeRec(T element, Node<T> nodeActual, Node<T> nodeAnterior) {
+		
+		if(element.equals(nodeActual.elem)){
+			
+			nodeAnterior.next = nodeActual.next;					
+			
+			return nodeActual.elem;			
+		}else {
+			return removeRec(element,nodeActual.next,nodeActual);
+		}
 	}
 
 
 	@Override
 	public T removeLast(T element) throws EmptyCollectionException {
      // TODO RECURSIVO
+		
+		if(element == null) {
+			throw new NullPointerException();
+		}else if(isEmpty()) {
+			throw new EmptyCollectionException("Lista simplemente enlazada");
+		}else {
+			return removeLastRec(element, front,null,0,0);
+		}
+	}
+
+	
+	private T removeLastRec(T element, Node<T> nodeActual,Node<T> nodeAnterior,int numeroElems,int numeroPosiciones) throws EmptyCollectionException {
+		
+		if(numeroPosiciones <= size()) {
+			if(element.equals(nodeActual.elem)) {
+				numeroElems++;
+				numeroPosiciones++;
+				
+				if(numeroElems == getTimeElement(element, front, 0, 0)) {
+					return removeRec(element, nodeActual, nodeAnterior);
+				}else {
+					return removeLastRec(element, nodeActual.next,nodeAnterior, numeroElems, numeroPosiciones);
+				}
+			}else {
+				numeroPosiciones++;
+				return removeLastRec(element, nodeActual.next, nodeAnterior,numeroElems, numeroPosiciones);
+			}
+		}
 		return null;
+		
+		
+	}
+	
+	
+	private int getTimeElement(T element,Node<T> node,int countElem,int countPositions){
+		
+		if(countPositions <= size()) {
+			if(element.equals(node.elem)) {
+				countElem++;
+				countPositions++;
+			}else {
+				countPositions++;
+				return getTimeElement(element, node.next, countElem, countPositions);
+			}
+		}
+		
+		return countElem;
+		
 	}
 
 
 	@Override
 	public boolean isEmpty() {
 		// TODO 
-		return false;
+		return (front != null);
 	}
 
 	@Override
