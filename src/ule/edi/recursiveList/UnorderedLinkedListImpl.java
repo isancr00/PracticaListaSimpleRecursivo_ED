@@ -19,6 +19,14 @@ public class UnorderedLinkedListImpl<T> extends AbstractLinkedListImpl<T> implem
 	@Override
 	public void addFirst(T element) {
      //TODO
+		if(element == null) {
+			throw new NullPointerException();
+		}else {
+			Node<T> aux = new Node<T>(element);
+			
+			aux.next = front;
+			front = aux;
+		}
 	}
 	
 	
@@ -26,6 +34,11 @@ public class UnorderedLinkedListImpl<T> extends AbstractLinkedListImpl<T> implem
 	public void addLast(T element) {
 		// TODO RECURSIVO
 		
+		if(element == null) {
+			throw new NullPointerException();
+		}else {
+			
+		}
 	
 	}	
 

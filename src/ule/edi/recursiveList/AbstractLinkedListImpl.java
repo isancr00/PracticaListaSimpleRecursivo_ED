@@ -287,37 +287,124 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public int size() {
 		// TODO RECURSIVO
-		return 0;
+		if(isEmpty()) {
+			return 0;
+		}else {
+			return sizeRec(front,0);
+		}
 	}
+	
+	private int sizeRec(Node<T> nodeAct, int tamanio) {
+		if(nodeAct.next == null) {
+			tamanio++;
+			return tamanio;
+		}else {
+			tamanio++;
+			return sizeRec(nodeAct.next,tamanio);
+		}
+	}
+	
 
 	@Override
 	public T getFirst() throws EmptyCollectionException {
 		// TODO RECURSIVO
-		return null;
+		if(isEmpty()) {
+			throw new EmptyCollectionException("LISTA SIMPLEMENTE ENLAZADA");
+		}
+		
+		return front.elem;
 	}
 
 	@Override
 	public String toStringFromUntil(int from, int until) {
 		// TODO RECURSIVO
 		
-		return null;
+		StringBuffer aux = new StringBuffer();
 		
+		if(from <= 0 || until <= 0 || until<from) {
+			throw new IllegalArgumentException();
+		}else if(isEmpty()) {
+			aux.append("()");
+			
+		}else {
+			aux.append("(");
+			aux.append(toStringFromUntilRec(from, until, 0,front));
+			aux.append(")");
+		}
+		
+		return aux.toString();
+		
+		
+	}
+	
+	private String toStringFromUntilRec(int from, int until,int posicion,Node<T> nodeAct) {
+		
+		StringBuffer aux = new StringBuffer();
+		
+		if(nodeAct.next != null) {
+			if(posicion == from) {
+				if(posicion == until) {
+					aux.append(nodeAct.elem);
+					aux.append(" ");
+					posicion++;
+				}else {
+					aux.append(nodeAct.elem);
+					aux.append(" ");
+					posicion++;
+					aux.append(toStringFromUntilRec(from, until, posicion, nodeAct.next));
+				}
+				
+				
+			}else {
+				posicion++;
+				aux.append(toStringFromUntilRec(from, until, posicion, nodeAct.next));
+			}
+			
+			
+		}
+		
+		return aux.toString();
+				
 	}
 
 
 	@Override
 	public String toStringReverse() {
 		// TODO RECURSIVE
+		StringBuffer aux = new StringBuffer();
+		
+		if(isEmpty()) {
+			aux.append("()");
+		}else {
+			aux.append("(");
+			aux.append(toStringReverseRec(front,null));
+			aux.append(")");
+		}
+		return aux.toString();
+	}
+	
+	private String toStringReverseRec(Node<T> nodeAct,Node<T> nodeAnt) {
+		
 		return null;
+		
 	}
 	
 
 	@Override
-	public int removeDuplicates() {
+	public int removeDuplicates() throws EmptyCollectionException {
 		// TODO RECURSIVE
 		// Implementar teniendo en cuenta que la lista está desordenada
-		return 0;
+		if(isEmpty()) {
+			throw new EmptyCollectionException("LISTA SIMPLEMENTE ENLAZADA");
+		}else {
+			return removeDuplicatesRec(front);			
+		}
 	
+	}
+	
+	private int removeDuplicatesRec(Node<T> nodo) {
+		return 0;
+		
 	}
 
 	
