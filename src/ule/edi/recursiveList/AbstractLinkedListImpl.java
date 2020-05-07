@@ -30,30 +30,30 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		}
 
 	}
-	
+
 	private class IteratorImpl implements Iterator<T> {
-     // TODO Implementar el iterador normal
-		
+		// TODO Implementar el iterador normal
+
 		private Node<T> current;
-		
+
 		public IteratorImpl(Node<T>node) {
 			// TODO Auto-generated constructor stub
 			this.current = node;
 		}
-		
+
 		@Override
 		public boolean hasNext() {
 
-		return (current != null);
+			return (current != null);
 		}
 
 		@Override
 		public T next() {
-			
+
 			if(!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			
+
 			T element = current.elem;			
 			current = current.next;
 			return element;
@@ -75,126 +75,129 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	public String toString() {
 		// TODO RECURSIVO
 		//	Construye y devuelve con el formato adecuado "(A B C )" 
-		
+
 		StringBuffer aux = new StringBuffer();
-		
+
 		aux.append("(");
-		
+
 		if(isEmpty()) {
 			aux.append("");
 		}else {
-			aux.append(toStringRec(front));
+			toStringRec(front,aux);
 		}
-		
+
 		aux.append(")");		
-		
-		
+
+
 		return aux.toString();
 	}
-	
-	private String toStringRec(Node<T> node) {
-		StringBuffer aux = new StringBuffer();
-		
+
+	private void toStringRec(Node<T> node,StringBuffer aux) {
 		if(node != null) {
+			
 			if(node.next == null) {
 				aux.append(node.elem);
+				aux.append(" ");
 			}else {
-				toStringRec(node.next);
+				aux.append(node.elem);
+				aux.append(" ");				
+				toStringRec(node.next,aux);
 			}
 		}
-		
-		return aux.toString();
+
 	}
-	
-	
+
+
 	@Override
 	public boolean contains(T target) {
 		// TODO RECURSIVO
-				
+
 		if(target == null) {
 			throw new NullPointerException();
+		}else if(isEmpty()) {
+			return false;
 		}else {
 			return containsRec(target,front);
 		}
-		
+
 	}
-	
+
 	private boolean containsRec(T elem,Node<T> node) {
-		if(elem == null || node == null) {
-			throw new NullPointerException();
+		if(elem.equals(node.elem)) {
+			return true;
 		}else {
-			return elem.equals(node.elem) && containsRec(elem, node.next);
+			return containsRec(elem, node.next);
 		}
 	}
-	
-  @Override
+
+	@Override
 	public int count(T element) {
-	// TODO RECURSIVO
-	  
-	  if(element == null) {
-		  throw new NullPointerException();
-	  }else {
-		  int contador = 0;
-		  return countRec(element,front, contador);
-	  }
-		
+		// TODO RECURSIVO
+
+		if(element == null) {
+			throw new NullPointerException();
+		}else {
+			int contador = 0;
+			return countRec(element,front, contador);
+		}
+
 	}
-  
-  private int countRec(T element, Node<T> node,int contador) {
-	  
-	  if(element.equals(node.elem)) {
-		  contador++;
-	  }else {
-		  contador = countRec(element, node.next,contador);
-	  }
-	  
-	  return contador;
-  }
+
+	private int countRec(T element, Node<T> node,int contador) {
+
+		if(element.equals(node.elem)) {
+			contador++;
+		}else {
+			contador = countRec(element, node.next,contador);
+		}
+
+		return contador;
+	}
 
 
 	@Override
 	public T getLast() throws EmptyCollectionException {
 		// TODO RECURSIVO
-		
+
 		if(isEmpty()) {
 			throw new EmptyCollectionException("LISTA SIMPLEMENTE ENLAZADA");
 		}else {
 			return getLastRec(front);
 		}
-			
+
 	}
-	
+
 	private T getLastRec(Node<T> node) {
 		if(node.next == null) {
 			return node.elem;
 		}else {
 			getLastRec(node.next);
 		}
-		
+
 		return null;
 	}
 
 
-	
+
 	@Override
 	public boolean isOrdered() {
-     // TODO RECURSIVO
-		
+		// TODO RECURSIVO
+
 		if(isEmpty()) {
 			return true;
 		}
 		return isOrderedRec(front);
 	}
-	
+
 	private boolean isOrderedRec(Node<T> node) {
 		//TODO
 		return false;
 	}
 
-	
+
 	@Override
 	public T remove(T element) throws EmptyCollectionException {
-    // TODO RECURSIVO
+		// TODO RECURSIVO
 		T elem = null;
 		if(isEmpty()) {
 			throw new EmptyCollectionException("Lista simplemente enlazada");
@@ -207,16 +210,16 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 			elem = removeRec(element,front.next,front);
 		}
 		return elem;
-		
-		
+
+
 	}
-	
+
 	private T removeRec(T element, Node<T> nodeActual, Node<T> nodeAnterior) {
-		
+
 		if(element.equals(nodeActual.elem)){
-			
+
 			nodeAnterior.next = nodeActual.next;					
-			
+
 			return nodeActual.elem;			
 		}else {
 			return removeRec(element,nodeActual.next,nodeActual);
@@ -226,8 +229,8 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 
 	@Override
 	public T removeLast(T element) throws EmptyCollectionException {
-     // TODO RECURSIVO
-		
+		// TODO RECURSIVO
+
 		if(element == null) {
 			throw new NullPointerException();
 		}else if(isEmpty()) {
@@ -237,14 +240,14 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		}
 	}
 
-	
+
 	private T removeLastRec(T element, Node<T> nodeActual,Node<T> nodeAnterior,int numeroElems,int numeroPosiciones) throws EmptyCollectionException {
-		
+
 		if(numeroPosiciones <= size()) {
 			if(element.equals(nodeActual.elem)) {
 				numeroElems++;
 				numeroPosiciones++;
-				
+
 				if(numeroElems == getTimeElement(element, front, 0, 0)) {
 					return removeRec(element, nodeActual, nodeAnterior);
 				}else {
@@ -256,13 +259,13 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 			}
 		}
 		return null;
-		
-		
+
+
 	}
-	
-	
+
+
 	private int getTimeElement(T element,Node<T> node,int countElem,int countPositions){
-		
+
 		if(countPositions <= size()) {
 			if(element.equals(node.elem)) {
 				countElem++;
@@ -272,16 +275,16 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 				return getTimeElement(element, node.next, countElem, countPositions);
 			}
 		}
-		
+
 		return countElem;
-		
+
 	}
 
 
 	@Override
 	public boolean isEmpty() {
 		// TODO 
-		return (front != null);
+		return (front == null);
 	}
 
 	@Override
@@ -293,7 +296,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 			return sizeRec(front,0);
 		}
 	}
-	
+
 	private int sizeRec(Node<T> nodeAct, int tamanio) {
 		if(nodeAct.next == null) {
 			tamanio++;
@@ -303,7 +306,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 			return sizeRec(nodeAct.next,tamanio);
 		}
 	}
-	
+
 
 	@Override
 	public T getFirst() throws EmptyCollectionException {
@@ -311,35 +314,33 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		if(isEmpty()) {
 			throw new EmptyCollectionException("LISTA SIMPLEMENTE ENLAZADA");
 		}
-		
+
 		return front.elem;
 	}
 
 	@Override
 	public String toStringFromUntil(int from, int until) {
 		// TODO RECURSIVO
-		
+
 		StringBuffer aux = new StringBuffer();
-		
+
 		if(from <= 0 || until <= 0 || until<from) {
 			throw new IllegalArgumentException();
 		}else if(isEmpty()) {
 			aux.append("()");
-			
+
 		}else {
 			aux.append("(");
-			aux.append(toStringFromUntilRec(from, until, 0,front));
+			toStringFromUntilRec(from, until, 0,front,aux);
 			aux.append(")");
 		}
-		
+
 		return aux.toString();
-		
-		
+
+
 	}
-	
-	private String toStringFromUntilRec(int from, int until,int posicion,Node<T> nodeAct) {
-		
-		StringBuffer aux = new StringBuffer();
+
+	private String toStringFromUntilRec(int from, int until,int posicion,Node<T> nodeAct, StringBuffer aux) {
 		
 		if(nodeAct.next != null) {
 			if(posicion == from) {
@@ -351,20 +352,20 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 					aux.append(nodeAct.elem);
 					aux.append(" ");
 					posicion++;
-					aux.append(toStringFromUntilRec(from, until, posicion, nodeAct.next));
+					aux.append(toStringFromUntilRec(from, until, posicion, nodeAct.next,aux));
 				}
-				
-				
+
+
 			}else {
 				posicion++;
-				aux.append(toStringFromUntilRec(from, until, posicion, nodeAct.next));
+				aux.append(toStringFromUntilRec(from, until, posicion, nodeAct.next,aux));
 			}
-			
-			
+
+
 		}
-		
+
 		return aux.toString();
-				
+
 	}
 
 
@@ -372,23 +373,29 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	public String toStringReverse() {
 		// TODO RECURSIVE
 		StringBuffer aux = new StringBuffer();
-		
+
 		if(isEmpty()) {
 			aux.append("()");
 		}else {
 			aux.append("(");
-			aux.append(toStringReverseRec(front,null));
+			toStringReverseRec(front,null,aux);
 			aux.append(")");
 		}
 		return aux.toString();
 	}
-	
-	private String toStringReverseRec(Node<T> nodeAct,Node<T> nodeAnt) {
-		
-		return null;
-		
+
+	private void toStringReverseRec(Node<T> nodeAct,Node<T> nodeAnt, StringBuffer aux) {
+		if(nodeAct.next == null) {
+			aux.append(nodeAct.elem);
+			aux.append(" ");
+		}else {
+			toStringReverseRec(nodeAct.next, nodeAct, aux);
+			aux.append(nodeAct.elem);
+			aux.append(" ");				
+		}
+
 	}
-	
+
 
 	@Override
 	public int removeDuplicates() throws EmptyCollectionException {
@@ -399,15 +406,15 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		}else {
 			return removeDuplicatesRec(front);			
 		}
-	
-	}
-	
-	private int removeDuplicatesRec(Node<T> nodo) {
-		return 0;
-		
+
 	}
 
-	
+	private int removeDuplicatesRec(Node<T> nodo) {
+		return 0;
+
+	}
+
+
 	@Override
 	public Iterator<T> iterator() {
 		// TODO 
