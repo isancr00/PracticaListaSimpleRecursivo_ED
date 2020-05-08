@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import ule.edi.exceptions.EmptyCollectionException;
+import ule.edi.exceptions.TypeIsNotComparableException;
 
 public class AbstractLinkedListImpl<T> implements ListADT<T> {
 
@@ -94,7 +95,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 
 	private void toStringRec(Node<T> node,StringBuffer aux) {
 		if(node != null) {
-			
+
 			if(node.next == null) {
 				aux.append(node.elem);
 				aux.append(" ");
@@ -186,11 +187,26 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		if(isEmpty()) {
 			return true;
 		}
+
 		return isOrderedRec(front);
 	}
 
 	private boolean isOrderedRec(Node<T> node) {
 		//TODO
+
+		try {
+			if(node.next != null) {
+
+				if(((Comparable<T>) node.elem).compareTo(node.next.elem) < 0) {
+					return (isOrderedRec(node.next));
+				}else {
+					return false;
+				}
+			}
+
+		}catch (ClassCastException e) {
+			throw new TypeIsNotComparableException();
+		}
 		return false;
 	}
 
@@ -341,7 +357,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	}
 
 	private String toStringFromUntilRec(int from, int until,int posicion,Node<T> nodeAct, StringBuffer aux) {
-		
+
 		if(nodeAct.next != null) {
 			if(posicion == from) {
 				if(posicion == until) {

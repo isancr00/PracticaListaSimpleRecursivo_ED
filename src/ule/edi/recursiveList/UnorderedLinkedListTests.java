@@ -84,7 +84,14 @@ public class UnorderedLinkedListTests {
    
 // AÑADIR MAS TESTS para el resto de casos especiales y para el resto de métodos
  // de las clases AbstractLinkedListImpl y UnorderedLinkedListImpl
+	@Test
 	
+	public void testIsOrdered() {
+	    UnorderedLinkedListImpl<Integer> lista=new UnorderedLinkedListImpl<Integer>(1,2,3,4,5,6); 
+		Assert.assertEquals(lSABC.toString(), "(A B C )");	
+//		Assert.assertTrue(lSABC.isOrdered());
+		Assert.assertTrue(lista.isOrdered());
+	}
  
 
 }
