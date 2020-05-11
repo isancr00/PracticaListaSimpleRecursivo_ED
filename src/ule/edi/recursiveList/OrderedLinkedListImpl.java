@@ -21,11 +21,39 @@ public class OrderedLinkedListImpl<T extends Comparable<? super T>> extends
 	public void add(T element) {
 		//TODO RECURSIVO
 		
-		
-		
+		if(element == null) {
+			throw new NullPointerException();
+		}if(isEmpty() || element.compareTo(front.elem) <= 0 ) {
+			Node<T> aux = new Node<T> (element);
+			aux.next = front;
+			front = aux;
+		}else if(size() == 1){
+			Node<T> aux = new Node<T> (element);
+			front.next = aux;
+			
+		}else {
+			addRec(element, front, null);			
+		}
 	
 	}
 	
+	private void addRec(T element, Node<T> node, Node<T> nodeAnt) {
+		Node<T> aux = new Node<T> (element);
+		
+		if(node != null) {
+			if(element.compareTo(node.elem) <= 0) {
+				nodeAnt.next = aux;
+				aux.next = node;
+			}else if(node.next == null){
+				node.next = aux;
+			}else {
+				addRec(element,node.next,node);
+			}
+			
+		}
+		
+		
+	}
 	
 
 	@Override
