@@ -69,7 +69,7 @@ public class Person implements Comparable<Person>{
 		// TODO Auto-generated method stub
 		// Las personas se comparan por la edad.
 		// Este método debe devolver la diferencia de edad entre this y o
-		return 0;
+		return this.age - o.age;
 		
 	}
 	
