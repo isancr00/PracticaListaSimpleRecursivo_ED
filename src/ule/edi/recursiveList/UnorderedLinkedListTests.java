@@ -309,6 +309,19 @@ public class UnorderedLinkedListTests {
 		lS.removeDuplicates();
 	}
 	
+	@Test(expected = TypeIsNotComparableException.class)
+	public void testIsOrderedNotComparable() {
+		UnorderedLinkedListImpl<int[]> lista = new UnorderedLinkedListImpl<int[]> ();
+		int[] numeros1 = {0,1};
+		int[] numeros2 = {0,1};
+
+		
+		lista.addFirst(numeros1);
+		lista.addFirst(numeros2);
+
+		
+		lista.isOrdered();
+	}
 
 
 }
